@@ -14,7 +14,6 @@ services:
       - ./data:/app/data
       # Sync host timezone (Linux): mount host timezone files into container.
       - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
     networks:
       - tavilyproxymanager
       - apinetwork
