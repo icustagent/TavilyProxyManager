@@ -1,18 +1,24 @@
-version: "3.8"
-
 services:
   tavily-proxy:
-    image: ghcr.io/xuncv/tavilyproxymanager:latest
-    pull_policy: always
+    image: ghcr.io/xuncv/tavilyproxymanager:main
+    container_name: tavilyproxymanager
     ports:
-      - "8080:8080"
+      - "8089:8080"
     environment:
-      - LISTEN_ADDR=:8080
-      - DATABASE_PATH=/app/data/proxy.db
-      - TAVILY_BASE_URL=https://api.tavily.com
-      - UPSTREAM_TIMEOUT=30s
+      LISTEN_ADDR: ":8080"
+      DATABASE_PATH: /app/data/proxy.db
+      TAVILY_BASE_URL: https://api.tavily.com
+      UPSTREAM_TIMEOUT: 30s
     volumes:
       - ./data:/app/data
-      # Sync host timezone (Linux): mount host timezone files into container.
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
+    networks:
+      - tavilyproxymanager
+      - apinetwork
+
+networks:
+  tavilyproxymanager:
+    name: tavilyproxymanager
+  apinetwork:
+    name: apinetwork
