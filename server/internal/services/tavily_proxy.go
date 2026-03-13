@@ -486,6 +486,9 @@ type usageResponse struct {
 		Usage int  `json:"usage"`
 		Limit *int `json:"limit"`
 	} `json:"key"`
+	Account struct {
+		PlanLimit *int `json:"plan_limit"`
+	} `json:"account"`
 }
 
 type UpstreamStatusError struct {
@@ -549,5 +552,10 @@ func (p *TavilyProxy) GetUsage(ctx context.Context, tavilyKey string) (int, *int
 	if err := json.Unmarshal(body, &out); err != nil {
 		return 0, nil, err
 	}
-	return out.Key.Usage, out.Key.Limit, nil
+
+	limit := out.Key.Limit
+	if limit == nil {
+		limit = out.Account.PlanLimit
+	}
+	return out.Key.Usage, limit, nil
 }
