@@ -11,12 +11,15 @@ services:
       - TAVILY_BASE_URL=https://api.tavily.com
       - UPSTREAM_TIMEOUT=30s
     volumes:
-      - ./data:/app/data
+      - tavilyproxymanager-data:/app/data
       # Sync host timezone (Linux): mount host timezone files into container.
       - /etc/localtime:/etc/localtime:ro
     networks:
       - tavilyproxymanager
       - apinetwork
+
+volumes:
+  tavilyproxymanager-data:
 
 networks:
   tavilyproxymanager:
